@@ -7,9 +7,11 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // --- ROUTE PUBLIK (Bisa diakses tanpa login) ---
-$routes->get('/', 'AuthController::login'); // Jadikan halaman login sebagai halaman utama dulu
+$routes->get('/', 'HomeController::index');
 $routes->get('/login', 'AuthController::login');
 $routes->post('/loginProcess', 'AuthController::loginProcess');
+$routes->get('/register', 'AuthController::register');
+$routes->post('/registerProcess', 'AuthController::registerProcess');
 
 // --- ROUTE TERPROTEKSI (Wajib login) ---
 // Kita bungkus menggunakan filter 'auth'
