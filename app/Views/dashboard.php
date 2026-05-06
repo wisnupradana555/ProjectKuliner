@@ -13,6 +13,12 @@
     <p>Role: <strong><?= $role_user ?></strong> | <a href="/logout">Logout</a></p>
     <hr>
     
+    <?php if(session()->getFlashdata('pesan')) : ?>
+        <div style="background: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+            <?= session()->getFlashdata('pesan') ?>
+        </div>
+    <?php endif; ?>
+
     <h3>Daftar Kuliner Semarang</h3>
     <a href="/tambah-kuliner" class="btn btn-add">+ Tambah Tempat</a>
     

@@ -18,4 +18,8 @@ $routes->post('/registerProcess', 'AuthController::registerProcess');
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->get('/dashboard', 'AdminController::index');
     $routes->get('/logout', 'AuthController::logout');
+    // Untuk menampilkan halaman form
+    $routes->get('/tambah-kuliner', 'AdminController::create');
+    // Untuk memproses data yang dikirim dari form
+    $routes->post('/simpan-kuliner', 'AdminController::store');
 });
