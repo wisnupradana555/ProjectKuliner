@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - JajanMap</title>
+    <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f4f7f6; }
@@ -13,7 +13,7 @@
 
     <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
         <div class="card-body">
-            <h2 class="text-center mb-4">JajanMap Login</h2>
+            <h2 class="text-center mb-4">Login</h2>
 
             <?php if(session()->getFlashdata('success')): ?>
                 <div class="alert alert-success text-center">

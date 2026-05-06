@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>JajanMap — Kuliner Sekitar Kampus 🍜</title>
+  <title>Kuliner Sekitar Kampus</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
@@ -123,6 +123,24 @@
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 1px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
     .list {
@@ -265,7 +283,7 @@
 <body>
 
 <header>
-  <div class="logo">Jajan<span>Map</span> 🍜</div>
+  <div class="logo"></div>
   <div class="header-right">
     <div class="filter-bar">
       <button class="filter-btn active" onclick="filterKat('semua', this)">Semua</button>
@@ -281,7 +299,10 @@
 
 <div class="main">
   <div class="sidebar">
-    <div class="sidebar-header">📍 <span id="count">0</span> tempat ditemukan</div>
+    <div class="sidebar-header">
+      <div>📍 <span id="count">0</span> tempat ditemukan</div>
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari nama atau alamat..." onkeyup="searchKuliner()">
+    </div>
     <div class="list" id="list"></div>
   </div>
   <div style="position:relative; flex:1;">
@@ -379,11 +400,27 @@ function renderList(data) {
   });
 }
 
+let activeFilter = 'semua';
+let currentSearch = '';
+
+function searchKuliner() {
+  currentSearch = document.getElementById('searchInput').value.toLowerCase();
+  applyFilters();
+}
+
 function filterKat(kat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  activeFilter = kat;
+  applyFilters();
+}
 
-  const filtered = kat === 'semua' ? kuliner : kuliner.filter(k => k.kategori === kat);
+function applyFilters() {
+  const filtered = kuliner.filter(k => {
+    const matchKat = activeFilter === 'semua' || k.kategori === activeFilter;
+    const matchSearch = k.nama.toLowerCase().includes(currentSearch) || k.alamat.toLowerCase().includes(currentSearch);
+    return matchKat && matchSearch;
+  });
 
   kuliner.forEach(k => {
     const show = filtered.find(f => f.id === k.id);
