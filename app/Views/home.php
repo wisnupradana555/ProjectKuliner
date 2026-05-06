@@ -293,7 +293,12 @@
       </button>
       <?php endforeach; ?>
     </div>
-    <a href="<?= base_url('login') ?>" class="btn-login">Masuk</a>
+    <?php if(session()->get('isLoggedIn')): ?>
+      <span style="font-size:0.82rem; color:var(--muted);">Halo, <strong style="color:var(--text)"><?= session()->get('nama') ?></strong></span>
+      <a href="<?= base_url('logout') ?>" class="btn-login">Logout</a>
+    <?php else: ?>
+      <a href="<?= base_url('login') ?>" class="btn-login">Masuk</a>
+    <?php endif; ?>
   </div>
 </header>
 
