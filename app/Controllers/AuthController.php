@@ -51,6 +51,37 @@ class AuthController extends BaseController
         }
     }
 
+    public function register()
+    {
+        return view('auth/register');
+    }
+
+    public function registerProcess()
+    {
+
+        $model = new UserModel();
+        
+        $rules = [
+            'nama' => 'required|min_length[3]',
+            'email' => 'required|valid_email|is_unique[users.email]',
+            'password' => 'required|min_length[3]',
+            'password_confirm' => 'matches[password]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $model->save([
+            'nama' => $this->request->getPost('nama'),
+            'email' => $this->request->getPost('email'),
+            'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            'role' => 'kontributor'
+        ]);
+
+        return redirect()->to('/login')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
+
     public function logout()
     {
         $session = session();
