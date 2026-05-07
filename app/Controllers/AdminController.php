@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\KulinerModel; // WAJIB ADA: Biar dia kenal model database-nya
+use App\Models\KulinerModel; 
 
 class AdminController extends BaseController
 {
@@ -21,12 +21,10 @@ class AdminController extends BaseController
 
         return view('dashboard', $data);
     }
-    // ... (fungsi index() biarkan saja)
-
     // 1. Fungsi untuk nampilin form
     public function create()
     {
-        return view('tambah_kuliner'); // Asumsi file view ada di luar folder admin
+        return view('tambah_kuliner');
     }
 
     // 2. Fungsi untuk nyimpen data ke database
@@ -37,7 +35,7 @@ class AdminController extends BaseController
         $data = [
             // Ambil ID user yang lagi login (kalau kosong, anggap user ID 1)
             'user_id'     => session()->get('id') ?? 1, 
-            'kategori_id' => 1, // Kita default 1 dulu (misal: Makanan Berat)
+            'kategori_id' => 1, 
             'nama'        => $this->request->getPost('nama'),
             'alamat'      => $this->request->getPost('alamat'),
             'deskripsi'   => $this->request->getPost('deskripsi'),
