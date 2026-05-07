@@ -3,24 +3,30 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\KulinerModel; 
+use App\Models\KulinerModel;
 
 class AdminController extends BaseController
 {
     public function index()
     {
-        // 1. Panggil model kuliner
-        $model = new KulinerModel();
-        
-        // 2. Siapkan data yang mau dikirim ke tampilan (View)
+        $db = \Config\Database::connect();
+
         $data = [
-            'nama_user'      => session()->get('nama'),
-            'role_user'      => session()->get('role'),
-            'tempat_kuliner' => $model->findAll() // Ambil semua data dari tabel
+            'total_approved'  => $db->table('tempat_kuliner')->where('status', 'approved')->countAllResults(),
+            'total_pending'   => $db->table('tempat_kuliner')->where('status', 'pending')->countAllResults(),
+            'total_kategori'  => $db->table('kategori')->countAllResults(),
+            'total_tag'       => $db->table('tags')->countAllResults(),
+            'pending_kuliner' => $db->table('tempat_kuliner tk')
+                ->select('tk.id, tk.nama, tk.status, k.nama_kategori, u.nama as user_nama')
+                ->join('kategori k', 'k.id = tk.kategori_id', 'left')
+                ->join('users u', 'u.id = tk.user_id', 'left')
+                ->where('tk.status', 'pending')
+                ->get()->getResultArray(),
         ];
 
-        return view('dashboard', $data);
+        return view('admin/dashboard', $data);
     }
+
     // 1. Fungsi untuk nampilin form
     public function create()
     {
