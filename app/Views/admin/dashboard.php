@@ -248,7 +248,6 @@
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-text">Panel <span>Admin</span></div>
-    <div class="logo-sub">Lokasi Kuliner UDINUS</div>
   </div>
 
   <nav class="sidebar-nav">
