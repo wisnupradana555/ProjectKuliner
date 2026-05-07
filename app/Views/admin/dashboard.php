@@ -260,6 +260,9 @@
     <a href="<?= base_url('admin') ?>" class="nav-item active">
       <i class="bi bi-grid-fill"></i> Dashboard
     </a>
+    <a href="<?= base_url('/') ?>" class="nav-item">
+      <i class="bi bi-map"></i> Lihat Peta
+    </a>
     <a href="<?= base_url('tambah-kuliner') ?>" class="nav-item">
       <i class="bi bi-shop"></i> Kuliner
     </a>
