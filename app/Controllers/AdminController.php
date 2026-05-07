@@ -32,8 +32,6 @@ class AdminController extends BaseController
 
         return view('admin/dashboard', $data);
     }
-<<<<<<< HEAD
-=======
 
     // Dashboard untuk kontributor
     public function dashboard()
@@ -55,12 +53,11 @@ class AdminController extends BaseController
 
         return view('kontributor/dashboard', $data);
     }
->>>>>>> 7e6af2dc1c5ef0133f3d576cd31885e46b1d8775
 
     // 1. Fungsi untuk nampilin form
     public function create()
     {
-        return view('tambah_kuliner');
+        return view('tambah_kuliner'); // Asumsi file view ada di luar folder admin
     }
 
     // 2. Fungsi untuk nyimpen data ke database
@@ -71,7 +68,7 @@ class AdminController extends BaseController
         $data = [
             // Ambil ID user yang lagi login (kalau kosong, anggap user ID 1)
             'user_id'     => session()->get('id') ?? 1, 
-            'kategori_id' => 1, 
+            'kategori_id' => 1, // Kita default 1 dulu (misal: Makanan Berat)
             'nama'        => $this->request->getPost('nama'),
             'alamat'      => $this->request->getPost('alamat'),
             'deskripsi'   => $this->request->getPost('deskripsi'),
