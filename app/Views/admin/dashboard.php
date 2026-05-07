@@ -238,6 +238,11 @@
     .btn-approve:hover { background: var(--green); color: #fff; }
     .btn-reject { background: rgba(232,82,58,0.1); color: var(--accent2); }
     .btn-reject:hover { background: var(--accent2); color: #fff; }
+    .btn-edit { background: rgba(46,107,232,0.1); color: var(--blue); }
+    .btn-edit:hover { background: var(--blue); color: #fff; }
+    .btn-delete { background: rgba(232,82,58,0.1); color: var(--accent2); }
+    .btn-delete:hover { background: var(--accent2); color: #fff; }
+    .empty-row td { text-align:center; color:var(--muted); padding:32px; }
 
     .empty-row td { text-align: center; color: var(--muted); padding: 32px; }
   </style>
@@ -360,6 +365,54 @@
         </div>
         <i class="bi bi-chevron-right action-arrow"></i>
       </a>
+    </div>
+
+    <!-- Semua Kuliner Table -->
+    <div class="section-title" style="margin-top:0">Semua Kuliner</div>
+    <div class="table-card" style="margin-bottom:28px">
+      <div class="table-header">
+        <div>
+          <div class="table-title">Daftar Lengkap Tempat Kuliner</div>
+          <div class="table-sub">Kelola semua data kuliner di sini</div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Tempat</th>
+            <th>Kategori</th>
+            <th>Disubmit oleh</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (!empty($semua_kuliner)): ?>
+            <?php foreach ($semua_kuliner as $k): ?>
+            <tr>
+              <td><?= esc($k['nama']) ?></td>
+              <td><?= esc($k['nama_kategori'] ?? '-') ?></td>
+              <td><?= esc($k['user_nama'] ?? '-') ?></td>
+              <td>
+                <?php if ($k['status'] === 'approved'): ?>
+                  <span class="badge badge-approved"><i class="bi bi-check-circle"></i> Approved</span>
+                <?php elseif ($k['status'] === 'pending'): ?>
+                  <span class="badge badge-pending"><i class="bi bi-clock"></i> Pending</span>
+                <?php else: ?>
+                  <span class="badge badge-rejected"><i class="bi bi-x-circle"></i> Rejected</span>
+                <?php endif; ?>
+              </td>
+              <td style="display:flex;gap:6px;">
+                <a href="#" class="btn-sm btn-edit">✎ Edit</a>
+                <a href="#" class="btn-sm btn-delete" onclick="return confirm('Yakin hapus?')">✕ Hapus</a>
+              </td>
+            </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr class="empty-row"><td colspan="5">Belum ada data kuliner</td></tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
     </div>
 
     <!-- Pending Table -->

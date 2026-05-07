@@ -15,7 +15,7 @@ $routes->post('/registerProcess', 'AuthController::registerProcess');
 
 // --- ROUTE TERPROTEKSI (Wajib login) ---
 $routes->group('', ['filter' => 'auth'], function($routes) {
-    $routes->get('/dashboard', 'AdminController::index');
+    $routes->get('/dashboard', 'AdminController::dashboard');
     $routes->get('/admin', 'AdminController::index');
     $routes->get('/logout', 'AuthController::logout');
     // Untuk menampilkan halaman form
