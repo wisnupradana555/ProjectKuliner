@@ -22,6 +22,12 @@ class AdminController extends BaseController
                 ->join('users u', 'u.id = tk.user_id', 'left')
                 ->where('tk.status', 'pending')
                 ->get()->getResultArray(),
+            'semua_kuliner'   => $db->table('tempat_kuliner tk')
+                ->select('tk.id, tk.nama, tk.status, k.nama_kategori, u.nama as user_nama')
+                ->join('kategori k', 'k.id = tk.kategori_id', 'left')
+                ->join('users u', 'u.id = tk.user_id', 'left')
+                ->orderBy('tk.id', 'DESC')
+                ->get()->getResultArray(),
         ];
 
         return view('admin/dashboard', $data);
