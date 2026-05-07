@@ -26,7 +26,27 @@ class AdminController extends BaseController
 
         return view('admin/dashboard', $data);
     }
-    // ... (fungsi index() biarkan saja)
+
+    // Dashboard untuk kontributor
+    public function dashboard()
+    {
+        $db  = \Config\Database::connect();
+        $uid = session()->get('user_id');
+
+        $data = [
+            'total_submisi' => $db->table('tempat_kuliner')->where('user_id', $uid)->countAllResults(),
+            'total_approved'=> $db->table('tempat_kuliner')->where('user_id', $uid)->where('status', 'approved')->countAllResults(),
+            'total_pending' => $db->table('tempat_kuliner')->where('user_id', $uid)->where('status', 'pending')->countAllResults(),
+            'kuliner_saya'  => $db->table('tempat_kuliner tk')
+                ->select('tk.id, tk.nama, tk.alamat, tk.status, k.nama_kategori')
+                ->join('kategori k', 'k.id = tk.kategori_id', 'left')
+                ->where('tk.user_id', $uid)
+                ->orderBy('tk.id', 'DESC')
+                ->get()->getResultArray(),
+        ];
+
+        return view('kontributor/dashboard', $data);
+    }
 
     // 1. Fungsi untuk nampilin form
     public function create()
