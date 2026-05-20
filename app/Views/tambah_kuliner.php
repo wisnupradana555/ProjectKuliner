@@ -26,7 +26,7 @@
     <div class="form-container">
         <h2>Tambah Tempat Kuliner</h2>
         
-        <form action="/simpan-kuliner" method="post">
+        <form action="/simpan-kuliner" method="post" enctype="multipart/form-data">
             <?= csrf_field(); ?>
             
             <div class="form-group">
@@ -53,6 +53,12 @@
             <div class="form-group">
                 <label>Deskripsi Singkat</label>
                 <textarea name="deskripsi" rows="3" class="form-control" placeholder="Ceritakan ciri khas atau menu andalan dari tempat ini..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Upload Foto Tempat (Opsional)</label>
+                <input type="file" name="foto" class="form-control" accept="image/*" style="padding: 9px;">
+                <small style="color: #888; font-size: 12px; margin-top: 5px; display: block;">Format: JPG, PNG. Maksimal 2MB.</small>
             </div>
 
             <div class="row">

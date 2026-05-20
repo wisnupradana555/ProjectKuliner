@@ -417,6 +417,21 @@
 
   <div class="content">
 
+    <!-- Flash Messages -->
+    <?php if (session()->getFlashdata('success')) : ?>
+      <div style="background: rgba(1, 181, 116, 0.1); color: var(--success); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(1, 181, 116, 0.2);">
+        <i class="bi bi-check-circle-fill" style="font-size: 1.2rem;"></i>
+        <?= session()->getFlashdata('success') ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('error')) : ?>
+      <div style="background: rgba(238, 93, 80, 0.1); color: var(--danger); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(238, 93, 80, 0.2);">
+        <i class="bi bi-exclamation-triangle-fill" style="font-size: 1.2rem;"></i>
+        <?= session()->getFlashdata('error') ?>
+      </div>
+    <?php endif; ?>
+
     <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card">
@@ -544,6 +559,58 @@
               </td>
             </tr>
           <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Moderasi Review -->
+    <div class="section-header" style="margin-top: 40px;">
+      <div class="section-title">Moderasi Review User</div>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="card-subtitle" style="margin-bottom: 24px;">Hapus review yang mengandung unsur SARA, spam, atau tidak relevan.</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Pemberi Review</th>
+            <th>Tempat Kuliner</th>
+            <th>Rating & Komentar</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- DUMMY DATA REVIEW UNTUK ADIT -->
+          <tr>
+            <td class="td-name">Budi Santoso</td>
+            <td>Nasi Goreng Babat Pak Karmin</td>
+            <td>
+              <div style="color: #FFB547; font-size: 0.8rem; margin-bottom: 4px;">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Tempatnya bersih, makanannya enak banget porsinya gede! Recommended buat mahasiswa.</div>
+            </td>
+            <td>
+              <div class="action-btns">
+                <a href="#" class="btn-action btn-delete" onclick="return confirm('Hapus review ini?')" title="Hapus Review"><i class="bi bi-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-name">Anonim Spam</td>
+            <td>Mie Ayam Tumini</td>
+            <td>
+              <div style="color: #FFB547; font-size: 0.8rem; margin-bottom: 4px;">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Jelek banget pelayanannya kasirnya judes wooo</div>
+            </td>
+            <td>
+              <div class="action-btns">
+                <a href="#" class="btn-action btn-delete" onclick="return confirm('Hapus review ini?')" title="Hapus Review"><i class="bi bi-trash"></i></a>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
