@@ -54,21 +54,21 @@ class AdminController extends BaseController
         return view('kontributor/dashboard', $data);
     }
 
-    // 1. Fungsi untuk nampilin form
+    // 1. CREATE: Nampilin form
     public function create()
     {
-        return view('tambah_kuliner'); // Asumsi file view ada di luar folder admin
+        return view('tambah_kuliner'); 
     }
 
-    // 2. Fungsi untuk nyimpen data ke database
+    // 2. CREATE: Nyimpen data ke database
     public function store()
     {
         $model = new KulinerModel();
         
         $data = [
-            // Ambil ID user yang lagi login (kalau kosong, anggap user ID 1)
-            'user_id'     => session()->get('id') ?? 1, 
-            'kategori_id' => 1, // Kita default 1 dulu (misal: Makanan Berat)
+            // PERBAIKAN: Disamakan menjadi 'user_id' agar tidak error foreign key
+            'user_id'     => session()->get('user_id') ?? 1, 
+            'kategori_id' => $this->request->getPost('kategori_id'),
             'nama'        => $this->request->getPost('nama'),
             'alamat'      => $this->request->getPost('alamat'),
             'deskripsi'   => $this->request->getPost('deskripsi'),
@@ -77,10 +77,61 @@ class AdminController extends BaseController
             'status'      => 'approved'
         ];
 
-        // Masukkan data ke database
         $model->insert($data);
 
-        // Balik ke dashboard bawa pesan sukses (Flashdata)
-        return redirect()->to('/dashboard')->with('pesan', 'Mantap! Data Kuliner baru berhasil ditambahkan.');
+        if (session()->get('role') === 'admin') {
+            return redirect()->to('/admin')->with('pesan', 'Mantap! Data Kuliner baru berhasil ditambahkan.');
+        } else {
+            return redirect()->to('/dashboard')->with('pesan', 'Mantap! Data Kuliner baru berhasil ditambahkan.');
+        }
+    }
+
+    // 3. UPDATE: Nampilin form edit
+    public function edit($id)
+    {
+        $model = new KulinerModel();
+        $data = [
+            'kuliner' => $model->find($id)
+        ];
+        
+        // Buat file view 'edit_kuliner.php' kalau belum ada
+        return view('edit_kuliner', $data); 
+    }
+
+    // 4. UPDATE: Nyimpen perubahan ke database
+    public function update($id)
+    {
+        $model = new KulinerModel();
+        
+        $data = [
+            'kategori_id' => $this->request->getPost('kategori_id'),
+            'nama'        => $this->request->getPost('nama'),
+            'alamat'      => $this->request->getPost('alamat'),
+            'deskripsi'   => $this->request->getPost('deskripsi'),
+            'lat'         => $this->request->getPost('lat'),
+            'lon'         => $this->request->getPost('lon'),
+        ];
+
+        $model->update($id, $data);
+
+        if (session()->get('role') === 'admin') {
+            return redirect()->to('/admin')->with('pesan', 'Sip! Data Kuliner berhasil diperbarui.');
+        } else {
+            return redirect()->to('/dashboard')->with('pesan', 'Sip! Data Kuliner berhasil diperbarui.');
+        }
+    }
+
+    // 5. DELETE: Hapus data
+    public function delete($id)
+    {
+        $model = new KulinerModel();
+        
+        $model->delete($id);
+
+        if (session()->get('role') === 'admin') {
+            return redirect()->to('/admin')->with('pesan', 'Data Kuliner berhasil dihapus dari sistem.');
+        } else {
+            return redirect()->to('/dashboard')->with('pesan', 'Data Kuliner berhasil dihapus dari sistem.');
+        }
     }
 }

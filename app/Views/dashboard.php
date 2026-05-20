@@ -20,7 +20,7 @@
     <?php endif; ?>
 
     <h3>Daftar Kuliner Semarang</h3>
-    <a href="/tambah-kuliner" class="btn btn-add">+ Tambah Tempat</a>
+    <a href="/admin/kuliner/tambah" class="btn btn-add">+ Tambah Tempat</a>
     
     <table>
         <thead>
@@ -40,7 +40,8 @@
                 <td><?= $k['alamat'] ?></td>
                 <td><?= $k['status'] ?></td>
                 <td>
-                    <a href="#">Edit</a> | <a href="#">Hapus</a>
+                    <a href="/edit-kuliner/<?= $k['id'] ?>" style="color: #ffc107; text-decoration: none; font-weight: bold;">Edit</a> | 
+                    <a href="/hapus-kuliner/<?= $k['id'] ?>" style="color: #dc3545; text-decoration: none; font-weight: bold;" onclick="return confirm('Yakin ingin menghapus <?= $k['nama'] ?>?');">Hapus</a>
                 </td>
             </tr>
             <?php endforeach; ?>

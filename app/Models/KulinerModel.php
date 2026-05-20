@@ -9,7 +9,7 @@ class KulinerModel extends Model
     protected $table            = 'tempat_kuliner';
     protected $primaryKey       = 'id';
     
-    // Ini daftar kolom yang boleh diisi (WAJIB SAMA dengan database)
+    // Ini daftar kolom yang boleh diisi
     protected $allowedFields    = [
         'user_id', 
         'kategori_id', 
@@ -21,8 +21,6 @@ class KulinerModel extends Model
         'status'
     ];
 
-    // Pengaturan waktu otomatis (created_at & updated_at)
+    // Pengaturan waktu otomatis
     protected $useTimestamps    = false;
-    //protected $createdField     = 'created_at';
-    //protected $updatedField     = 'updated_at';
 }

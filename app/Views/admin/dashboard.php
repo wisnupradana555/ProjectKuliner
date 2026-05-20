@@ -406,8 +406,8 @@
                 <?php endif; ?>
               </td>
               <td style="display:flex;gap:6px;">
-                <a href="#" class="btn-sm btn-edit">✎ Edit</a>
-                <a href="#" class="btn-sm btn-delete" onclick="return confirm('Yakin hapus?')">✕ Hapus</a>
+                <a href="<?= base_url('edit-kuliner/' . $k['id']) ?>" class="btn-sm btn-edit">✎ Edit</a>
+                <a href="<?= base_url('hapus-kuliner/' . $k['id']) ?>" class="btn-sm btn-delete" onclick="return confirm('Yakin ingin menghapus <?= esc($k['nama']) ?>?')">✕ Hapus</a>
               </td>
             </tr>
             <?php endforeach; ?>
@@ -446,8 +446,8 @@
               <td><?= esc($k['user_nama'] ?? '-') ?></td>
               <td><span class="badge badge-pending"><i class="bi bi-clock"></i> Pending</span></td>
               <td style="display:flex;gap:6px;">
-                <a href="#" class="btn-sm btn-approve">✓ Approve</a>
-                <a href="#" class="btn-sm btn-reject">✕ Reject</a>
+                <a href="<?= base_url('approve-kuliner/' . $k['id']) ?>" class="btn-sm btn-approve" onclick="return confirm('Approve tempat ini?')">✓ Approve</a>
+                <a href="<?= base_url('hapus-kuliner/' . $k['id']) ?>" class="btn-sm btn-reject" onclick="return confirm('Tolak dan hapus tempat ini?')">✕ Reject</a>
               </td>
             </tr>
             <?php endforeach; ?>
