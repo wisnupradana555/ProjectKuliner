@@ -3,248 +3,367 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <title>Dashboard Admin | Panel Profesional</title>
+  
+  <!-- Font Modern SaaS (Outfit untuk heading, Inter untuk teks) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"/>
   <style>
     :root {
-      --bg: #f7f5f2;
-      --sidebar: #0f0e0d;
-      --sidebar-w: 240px;
-      --accent: #f5a623;
-      --accent2: #e8523a;
-      --text: #1a1917;
-      --muted: #7a7672;
-      --card: #ffffff;
-      --border: #e8e4df;
-      --green: #2d9e6b;
-      --blue: #2e6be8;
+      --bg-body: #F4F7FE;
+      --sidebar-bg: #0B1437;
+      --card-bg: #FFFFFF;
+      --text-main: #2B3674;
+      --text-muted: #A3AED0;
+      
+      --primary: #4318FF;
+      --primary-hover: #3311DB;
+      --success: #01B574;
+      --warning: #FFB547;
+      --danger: #EE5D50;
+      
+      --sidebar-width: 260px;
+      --shadow-card: 0px 18px 40px rgba(112, 144, 176, 0.12);
+      --shadow-soft: 0px 4px 12px rgba(112, 144, 176, 0.08);
+      --border-radius: 16px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
       display: flex;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* --- SIDEBAR --- */
     .sidebar {
-      width: var(--sidebar-w);
-      background: var(--sidebar);
-      display: flex;
-      flex-direction: column;
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      background-image: linear-gradient(180deg, #0B1437 0%, #080F2A 100%);
       position: fixed;
       top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
       z-index: 100;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.05);
     }
 
     .sidebar-logo {
-      padding: 24px 20px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 32px 24px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .logo-text {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.3rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
       font-weight: 800;
       color: #fff;
+      letter-spacing: -0.5px;
     }
+    .logo-text span { color: #fff; opacity: 0.5; font-weight: 500; }
 
-    .logo-text span { color: var(--accent); }
-
-    .logo-sub {
-      font-size: 0.68rem;
-      color: rgba(255,255,255,0.35);
-      margin-top: 2px;
-      letter-spacing: 0.5px;
+    .sidebar-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 0 24px 16px;
     }
 
     .sidebar-nav {
       flex: 1;
-      padding: 16px 12px;
+      padding: 0 16px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-    }
-
-    .nav-label {
-      font-size: 0.63rem;
-      color: rgba(255,255,255,0.25);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      padding: 12px 8px 6px;
+      gap: 6px;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      color: rgba(255,255,255,0.55);
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #A3AED0;
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       font-weight: 500;
-      transition: all 0.15s;
+      transition: all 0.2s ease;
     }
 
-    .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
-    .nav-item.active { background: var(--accent); color: #000; font-weight: 600; }
-    .nav-item i { font-size: 1rem; width: 18px; text-align: center; }
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: var(--primary);
+      box-shadow: 0px 4px 16px rgba(67, 24, 255, 0.3);
+      font-weight: 600;
+    }
+
+    .nav-item i { font-size: 1.1rem; }
 
     .sidebar-footer {
-      padding: 16px 12px;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 24px 20px;
+      background: rgba(0,0,0,0.15);
     }
 
-    .user-info {
+    .user-profile {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      margin-bottom: 8px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .avatar {
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      background: var(--accent);
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4318FF, #868CFF);
+      color: #fff;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800; font-size: 0.8rem; color: #000;
-      flex-shrink: 0;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(67, 24, 255, 0.3);
     }
 
-    .user-name { font-size: 0.82rem; font-weight: 600; color: #fff; line-height: 1.2; }
-    .user-role { font-size: 0.68rem; color: var(--accent); font-weight: 500; }
+    .user-info .name {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .user-info .role {
+      color: #A3AED0;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
 
     .btn-logout {
-      display: flex; align-items: center; gap: 8px;
-      width: 100%; padding: 9px 12px; border-radius: 8px;
-      background: rgba(232,82,58,0.12); border: 1px solid rgba(232,82,58,0.2);
-      color: #e8523a; font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem; font-weight: 500; cursor: pointer;
-      text-decoration: none; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-weight: 500; font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover {
+      background: var(--danger);
+      box-shadow: 0 4px 12px rgba(238, 93, 80, 0.3);
     }
 
-    .btn-logout:hover { background: rgba(232,82,58,0.2); color: #e8523a; }
-
-    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+    /* --- MAIN CONTENT --- */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
     .topbar {
-      background: var(--card); border-bottom: 1px solid var(--border);
-      padding: 16px 28px; display: flex; align-items: center;
-      justify-content: space-between; position: sticky; top: 0; z-index: 50;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(244, 247, 254, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 50;
     }
 
-    .page-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
-    .breadcrumb { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-    .topbar-right { display: flex; align-items: center; gap: 10px; }
-    .greeting { font-size: 0.82rem; color: var(--muted); }
-    .greeting strong { color: var(--text); }
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
 
-    .content { padding: 28px; flex: 1; }
+    .content { padding: 8px 32px 40px; }
 
+    /* --- STATS GRID --- */
     .stats-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 16px; margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
     }
 
     .stat-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 20px;
-      display: flex; align-items: flex-start; justify-content: space-between;
-      transition: transform 0.15s, box-shadow 0.15s;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
-    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
-    .stat-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
-    .stat-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; }
-    .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 50px rgba(112, 144, 176, 0.18);
+    }
 
     .stat-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-    }
-
-    .icon-orange { background: rgba(245,166,35,0.12); color: var(--accent); }
-    .icon-red    { background: rgba(232,82,58,0.12);  color: var(--accent2); }
-    .icon-green  { background: rgba(45,158,107,0.12); color: var(--green); }
-    .icon-blue   { background: rgba(46,107,232,0.12); color: var(--blue); }
-
-    .section-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; }
-
-    .actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
-
-    .action-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 18px; display: flex; align-items: center; gap: 14px;
-      text-decoration: none; color: var(--text); transition: all 0.15s;
-    }
-
-    .action-card:hover {
-      border-color: var(--accent); box-shadow: 0 4px 16px rgba(245,166,35,0.12);
-      transform: translateY(-1px); color: var(--text);
-    }
-
-    .action-icon {
-      width: 44px; height: 44px; border-radius: 10px;
+      width: 56px; height: 56px;
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; flex-shrink: 0;
+      font-size: 1.5rem;
+    }
+    .icon-blue { background: rgba(67, 24, 255, 0.08); color: var(--primary); }
+    .icon-orange { background: rgba(255, 181, 71, 0.1); color: var(--warning); }
+    .icon-green { background: rgba(1, 181, 116, 0.1); color: var(--success); }
+    .icon-red { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
+
+    .stat-details .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .stat-details .value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
     }
 
-    .action-name { font-weight: 600; font-size: 0.875rem; }
-    .action-desc { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-    .action-arrow { margin-left: auto; color: var(--muted); font-size: 0.9rem; }
-
-    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-
-    .table-header {
-      padding: 16px 20px; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+    /* --- SECTION HEADERS --- */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
-    .table-title { font-weight: 600; font-size: 0.9rem; }
-    .table-sub { font-size: 0.72rem; color: var(--muted); }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(67, 24, 255, 0.2);
+    }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    /* --- TABLES --- */
+    .table-wrapper {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+
+    .table-wrapper .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .table-wrapper .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
 
     table { width: 100%; border-collapse: collapse; }
+    
     th {
-      padding: 10px 20px; text-align: left; font-size: 0.72rem; font-weight: 600;
-      color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px;
-      background: #faf9f7; border-bottom: 1px solid var(--border);
+      text-align: left;
+      padding: 0 16px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #E9EDF7;
     }
-    td { padding: 13px 20px; font-size: 0.84rem; border-bottom: 1px solid var(--border); }
+
+    td {
+      padding: 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-main);
+      border-bottom: 1px solid #F4F7FE;
+      vertical-align: middle;
+    }
+    
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #faf9f7; }
+    tr:hover td { background: rgba(244, 247, 254, 0.5); }
 
+    .td-name { font-weight: 600; }
+
+    /* --- BADGES & BUTTONS --- */
     .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 0.75rem; font-weight: 700;
     }
-    .badge-pending  { background: rgba(245,166,35,0.12); color: #b37700; }
-    .badge-approved { background: rgba(45,158,107,0.12); color: var(--green); }
-    .badge-rejected { background: rgba(232,82,58,0.12);  color: var(--accent2); }
+    .badge-pending { background: rgba(255, 181, 71, 0.1); color: #E89B1F; }
+    .badge-approved { background: rgba(1, 181, 116, 0.1); color: var(--success); }
+    .badge-rejected { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
-    .btn-sm {
-      padding: 5px 12px; border-radius: 6px; font-size: 0.75rem;
-      font-weight: 600; border: none; cursor: pointer;
-      text-decoration: none; transition: all 0.15s; display: inline-block;
+    .action-btns {
+      display: flex; gap: 8px;
     }
-    .btn-approve { background: rgba(45,158,107,0.12); color: var(--green); }
-    .btn-approve:hover { background: var(--green); color: #fff; }
-    .btn-reject { background: rgba(232,82,58,0.1); color: var(--accent2); }
-    .btn-reject:hover { background: var(--accent2); color: #fff; }
-    .btn-edit { background: rgba(46,107,232,0.1); color: var(--blue); }
-    .btn-edit:hover { background: var(--blue); color: #fff; }
-    .btn-delete { background: rgba(232,82,58,0.1); color: var(--accent2); }
-    .btn-delete:hover { background: var(--accent2); color: #fff; }
-    .empty-row td { text-align:center; color:var(--muted); padding:32px; }
+    .btn-action {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+    .btn-approve { background: rgba(1, 181, 116, 0.1); color: var(--success); }
+    .btn-approve:hover { background: var(--success); color: #fff; }
+    
+    .btn-reject { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
+    .btn-reject:hover { background: var(--danger); color: #fff; }
+    
+    .btn-edit { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
+    .btn-edit:hover { background: var(--primary); color: #fff; }
+    
+    .btn-delete { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
+    .btn-delete:hover { background: var(--danger); color: #fff; }
 
-    .empty-row td { text-align: center; color: var(--muted); padding: 32px; }
+    .empty-state {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
   </style>
 </head>
 <body>
@@ -252,38 +371,36 @@
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-text">Panel <span>Admin</span></div>
+    <div class="logo-text">Jajan<span>Map</span></div>
   </div>
+  
+  <div class="sidebar-divider"></div>
 
   <nav class="sidebar-nav">
-    <div class="nav-label">Menu Utama</div>
     <a href="<?= base_url('admin') ?>" class="nav-item active">
-      <i class="bi bi-grid-fill"></i> Dashboard
+      <i class="bi bi-grid-1x2-fill"></i> Dashboard
     </a>
     <a href="<?= base_url('/') ?>" class="nav-item">
-      <i class="bi bi-map"></i> Lihat Peta
+      <i class="bi bi-compass"></i> Lihat Peta
     </a>
     <a href="<?= base_url('tambah-kuliner') ?>" class="nav-item">
-      <i class="bi bi-shop"></i> Kuliner
+      <i class="bi bi-shop"></i> Tambah Kuliner
     </a>
     <a href="#" class="nav-item">
-      <i class="bi bi-tag-fill"></i> Kategori
-    </a>
-    <a href="#" class="nav-item">
-      <i class="bi bi-bookmark-fill"></i> Tag
+      <i class="bi bi-tags"></i> Kategori & Tag
     </a>
   </nav>
 
   <div class="sidebar-footer">
-    <div class="user-info">
+    <div class="user-profile">
       <div class="avatar"><?= strtoupper(substr(session()->get('nama'), 0, 1)) ?></div>
-      <div>
-        <div class="user-name"><?= session()->get('nama') ?></div>
-        <div class="user-role"><?= ucfirst(session()->get('role')) ?></div>
+      <div class="user-info">
+        <div class="name"><?= session()->get('nama') ?></div>
+        <div class="role">Administrator</div>
       </div>
     </div>
     <a href="<?= base_url('logout') ?>" class="btn-logout">
-      <i class="bi bi-box-arrow-left"></i> Keluar
+      <i class="bi bi-box-arrow-right"></i> Keluar
     </a>
   </div>
 </aside>
@@ -291,148 +408,58 @@
 <!-- MAIN CONTENT -->
 <div class="main">
 
-  <!-- Topbar -->
   <div class="topbar">
     <div>
-      <div class="page-title">Dashboard</div>
-      <div class="breadcrumb">Selamat datang kembali 👋</div>
-    </div>
-    <div class="topbar-right">
-      <div class="greeting">Halo, <strong><?= session()->get('nama') ?></strong></div>
+      <div class="breadcrumb">Admin / Dashboard</div>
+      <div class="page-title">Overview</div>
     </div>
   </div>
 
-  <!-- Content -->
   <div class="content">
 
     <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-info">
-          <div class="stat-label">Total Kuliner</div>
-          <div class="stat-value"><?= $total_approved ?></div>
-          <div class="stat-sub">Sudah approved</div>
+        <div class="stat-icon icon-blue"><i class="bi bi-shop-window"></i></div>
+        <div class="stat-details">
+          <div class="label">Total Kuliner</div>
+          <div class="value"><?= $total_approved ?></div>
         </div>
-        <div class="stat-icon icon-orange"><i class="bi bi-shop"></i></div>
       </div>
       <div class="stat-card">
-        <div class="stat-info">
-          <div class="stat-label">Menunggu Review</div>
-          <div class="stat-value"><?= $total_pending ?></div>
-          <div class="stat-sub">Perlu dimoderasi</div>
+        <div class="stat-icon icon-orange"><i class="bi bi-hourglass-split"></i></div>
+        <div class="stat-details">
+          <div class="label">Menunggu Review</div>
+          <div class="value"><?= $total_pending ?></div>
         </div>
-        <div class="stat-icon icon-red"><i class="bi bi-clock-history"></i></div>
       </div>
       <div class="stat-card">
-        <div class="stat-info">
-          <div class="stat-label">Kategori</div>
-          <div class="stat-value"><?= $total_kategori ?></div>
-          <div class="stat-sub">Jenis tempat makan</div>
+        <div class="stat-icon icon-green"><i class="bi bi-bookmark-star"></i></div>
+        <div class="stat-details">
+          <div class="label">Total Kategori</div>
+          <div class="value"><?= $total_kategori ?></div>
         </div>
-        <div class="stat-icon icon-green"><i class="bi bi-tag"></i></div>
       </div>
       <div class="stat-card">
-        <div class="stat-info">
-          <div class="stat-label">Tag</div>
-          <div class="stat-value"><?= $total_tag ?></div>
-          <div class="stat-sub">Label tersedia</div>
+        <div class="stat-icon icon-red"><i class="bi bi-tags-fill"></i></div>
+        <div class="stat-details">
+          <div class="label">Total Tag</div>
+          <div class="value"><?= $total_tag ?></div>
         </div>
-        <div class="stat-icon icon-blue"><i class="bi bi-bookmark"></i></div>
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="section-title">Aksi Cepat</div>
-    <div class="actions-grid">
-      <a href="<?= base_url('tambah-kuliner') ?>" class="action-card">
-        <div class="action-icon icon-orange"><i class="bi bi-plus-circle-fill"></i></div>
-        <div>
-          <div class="action-name">Tambah Tempat</div>
-          <div class="action-desc">Tambah kuliner baru ke database</div>
-        </div>
-        <i class="bi bi-chevron-right action-arrow"></i>
-      </a>
-      <a href="#" class="action-card">
-        <div class="action-icon icon-green"><i class="bi bi-tag-fill"></i></div>
-        <div>
-          <div class="action-name">Tambah Kategori</div>
-          <div class="action-desc">Buat kategori tempat makan baru</div>
-        </div>
-        <i class="bi bi-chevron-right action-arrow"></i>
-      </a>
-      <a href="#" class="action-card">
-        <div class="action-icon icon-blue"><i class="bi bi-bookmark-fill"></i></div>
-        <div>
-          <div class="action-name">Tambah Tag</div>
-          <div class="action-desc">Buat tag / label baru</div>
-        </div>
-        <i class="bi bi-chevron-right action-arrow"></i>
-      </a>
-    </div>
-
-    <!-- Semua Kuliner Table -->
-    <div class="section-title" style="margin-top:0">Semua Kuliner</div>
-    <div class="table-card" style="margin-bottom:28px">
-      <div class="table-header">
-        <div>
-          <div class="table-title">Daftar Lengkap Tempat Kuliner</div>
-          <div class="table-sub">Kelola semua data kuliner di sini</div>
-        </div>
-      </div>
+    <!-- Menunggu Moderasi -->
+    <div class="table-wrapper">
+      <div class="card-title">Menunggu Moderasi</div>
+      <div class="card-subtitle">Tempat kuliner yang butuh persetujuan admin</div>
+      
       <table>
         <thead>
           <tr>
             <th>Nama Tempat</th>
             <th>Kategori</th>
-            <th>Disubmit oleh</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if (!empty($semua_kuliner)): ?>
-            <?php foreach ($semua_kuliner as $k): ?>
-            <tr>
-              <td><?= esc($k['nama']) ?></td>
-              <td><?= esc($k['nama_kategori'] ?? '-') ?></td>
-              <td><?= esc($k['user_nama'] ?? '-') ?></td>
-              <td>
-                <?php if ($k['status'] === 'approved'): ?>
-                  <span class="badge badge-approved"><i class="bi bi-check-circle"></i> Approved</span>
-                <?php elseif ($k['status'] === 'pending'): ?>
-                  <span class="badge badge-pending"><i class="bi bi-clock"></i> Pending</span>
-                <?php else: ?>
-                  <span class="badge badge-rejected"><i class="bi bi-x-circle"></i> Rejected</span>
-                <?php endif; ?>
-              </td>
-              <td style="display:flex;gap:6px;">
-                <a href="<?= base_url('edit-kuliner/' . $k['id']) ?>" class="btn-sm btn-edit">✎ Edit</a>
-                <a href="<?= base_url('hapus-kuliner/' . $k['id']) ?>" class="btn-sm btn-delete" onclick="return confirm('Yakin ingin menghapus <?= esc($k['nama']) ?>?')">✕ Hapus</a>
-              </td>
-            </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr class="empty-row"><td colspan="5">Belum ada data kuliner</td></tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pending Table -->
-    <div class="section-title">Menunggu Moderasi</div>
-    <div class="table-card">
-      <div class="table-header">
-        <div>
-          <div class="table-title">Kuliner Pending</div>
-          <div class="table-sub">Butuh persetujuan sebelum tampil di publik</div>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama Tempat</th>
-            <th>Kategori</th>
-            <th>Disubmit oleh</th>
+            <th>Disubmit Oleh</th>
             <th>Status</th>
             <th>Aksi</th>
           </tr>
@@ -441,19 +468,80 @@
           <?php if (!empty($pending_kuliner)): ?>
             <?php foreach ($pending_kuliner as $k): ?>
             <tr>
-              <td><?= esc($k['nama']) ?></td>
+              <td class="td-name"><?= esc($k['nama']) ?></td>
               <td><?= esc($k['nama_kategori'] ?? '-') ?></td>
               <td><?= esc($k['user_nama'] ?? '-') ?></td>
-              <td><span class="badge badge-pending"><i class="bi bi-clock"></i> Pending</span></td>
-              <td style="display:flex;gap:6px;">
-                <a href="<?= base_url('approve-kuliner/' . $k['id']) ?>" class="btn-sm btn-approve" onclick="return confirm('Approve tempat ini?')">✓ Approve</a>
-                <a href="<?= base_url('hapus-kuliner/' . $k['id']) ?>" class="btn-sm btn-reject" onclick="return confirm('Tolak dan hapus tempat ini?')">✕ Reject</a>
+              <td><span class="badge badge-pending"><i class="bi bi-circle-fill" style="font-size:0.5rem"></i> Pending</span></td>
+              <td>
+                <div class="action-btns">
+                  <a href="<?= base_url('approve-kuliner/' . $k['id']) ?>" class="btn-action btn-approve" title="Approve" onclick="return confirm('Approve tempat ini?')"><i class="bi bi-check-lg"></i></a>
+                  <a href="<?= base_url('hapus-kuliner/' . $k['id']) ?>" class="btn-action btn-reject" title="Reject" onclick="return confirm('Tolak dan hapus tempat ini?')"><i class="bi bi-x-lg"></i></a>
+                </div>
               </td>
             </tr>
             <?php endforeach; ?>
           <?php else: ?>
-            <tr class="empty-row">
-              <td colspan="5">🎉 Tidak ada kuliner yang menunggu moderasi</td>
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <i class="bi bi-check2-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 8px; display: block"></i>
+                  Tidak ada kuliner yang menunggu moderasi
+                </div>
+              </td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Semua Kuliner -->
+    <div class="section-header">
+      <div class="section-title">Semua Kuliner</div>
+      <a href="<?= base_url('tambah-kuliner') ?>" class="btn-primary">
+        <i class="bi bi-plus-lg"></i> Tambah Baru
+      </a>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Tempat</th>
+            <th>Kategori</th>
+            <th>Disubmit Oleh</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (!empty($semua_kuliner)): ?>
+            <?php foreach ($semua_kuliner as $k): ?>
+            <tr>
+              <td class="td-name"><?= esc($k['nama']) ?></td>
+              <td><?= esc($k['nama_kategori'] ?? '-') ?></td>
+              <td><?= esc($k['user_nama'] ?? '-') ?></td>
+              <td>
+                <?php if ($k['status'] === 'approved'): ?>
+                  <span class="badge badge-approved"><i class="bi bi-check2"></i> Approved</span>
+                <?php elseif ($k['status'] === 'pending'): ?>
+                  <span class="badge badge-pending"><i class="bi bi-hourglass"></i> Pending</span>
+                <?php else: ?>
+                  <span class="badge badge-rejected"><i class="bi bi-x-lg"></i> Rejected</span>
+                <?php endif; ?>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="<?= base_url('edit-kuliner/' . $k['id']) ?>" class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                  <a href="<?= base_url('hapus-kuliner/' . $k['id']) ?>" class="btn-action btn-delete" onclick="return confirm('Yakin menghapus <?= esc($k['nama']) ?>?')" title="Hapus"><i class="bi bi-trash"></i></a>
+                </div>
+              </td>
+            </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">Belum ada data kuliner</div>
+              </td>
             </tr>
           <?php endif; ?>
         </tbody>
