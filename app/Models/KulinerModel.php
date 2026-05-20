@@ -18,7 +18,8 @@ class KulinerModel extends Model
         'deskripsi', 
         'lat', 
         'lon', 
-        'status'
+        'status',
+        'gambar'
     ];
 
     // Pengaturan waktu otomatis

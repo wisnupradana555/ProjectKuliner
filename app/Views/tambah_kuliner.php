@@ -25,7 +25,15 @@
 
     <div class="form-container">
         <h2>Tambah Tempat Kuliner</h2>
-        
+        <?php if (session()->getFlashdata('errors')) : ?>
+        <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <ul style="margin: 0; padding-left: 20px;">
+                <?php foreach (session()->getFlashdata('errors') as $error) : ?>
+                    <li><?= esc($error) ?></li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    <?php endif; ?>
         <form action="/simpan-kuliner" method="post" enctype="multipart/form-data">
             <?= csrf_field(); ?>
             
@@ -54,10 +62,9 @@
                 <label>Deskripsi Singkat</label>
                 <textarea name="deskripsi" rows="3" class="form-control" placeholder="Ceritakan ciri khas atau menu andalan dari tempat ini..."></textarea>
             </div>
-
             <div class="form-group">
-                <label>Upload Foto Tempat (Opsional)</label>
-                <input type="file" name="foto" class="form-control" accept="image/*" style="padding: 9px;">
+                <label>Foto Tempat Kuliner</label>
+                <input type="file" name="gambar" class="form-control" accept="image/*" style="padding: 9px;" required>
                 <small style="color: #888; font-size: 12px; margin-top: 5px; display: block;">Format: JPG, PNG. Maksimal 2MB.</small>
             </div>
 
@@ -71,7 +78,6 @@
                     <input type="text" name="lon" class="form-control" placeholder="Contoh: 110.416664">
                 </div>
             </div>
-
             <div class="btn-group">
                 <button type="submit" class="btn-save">Simpan Data</button>
                 <a href="/dashboard" class="btn-cancel">Batal</a>
