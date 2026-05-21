@@ -65,7 +65,7 @@
             <div class="form-group">
                 <label>Foto Tempat Kuliner</label>
                 <input type="file" name="gambar" class="form-control" accept="image/*" style="padding: 9px;" required>
-                <small style="color: #888; font-size: 12px; margin-top: 5px; display: block;">Format: JPG, PNG. Maksimal 2MB.</small>
+                <small style="color: #888; font-size: 12px; margin-top: 5px; display: block;">Format: JPG, PNG, JPEG. Maksimal 2MB.</small>
             </div>
 
             <div class="row">

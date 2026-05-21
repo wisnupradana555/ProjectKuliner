@@ -79,7 +79,7 @@ class AdminController extends BaseController
                 'errors' => [
                     'uploaded' => 'Pilih foto tempat terlebih dahulu.',
                     'is_image' => 'File harus berupa gambar.',
-                    'mime_in'  => 'Format gambar harus JPG/PNG.',
+                    'mime_in'  => 'Format gambar harus JPG/PNG/JPEG.',
                     'max_size' => 'Ukuran maksimal 2MB.'
                 ]
             ]
