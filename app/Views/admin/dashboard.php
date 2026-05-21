@@ -384,7 +384,7 @@
       <i class="bi bi-compass"></i> Lihat Peta
     </a>
     <a href="<?= base_url('tambah-kuliner') ?>" class="nav-item">
-      <i class="bi bi-shop"></i> Tambah Kuliner
+      <i class="bi bi-shop"></i> Tambah Tempat
     </a>
     <a href="#" class="nav-item">
       <i class="bi bi-tags"></i> Kategori & Tag
@@ -419,14 +419,14 @@
 
     <!-- Flash Messages -->
     <?php if (session()->getFlashdata('success')) : ?>
-      <div style="background: rgba(1, 181, 116, 0.1); color: var(--success); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(1, 181, 116, 0.2);">
+      <div class="flash-alert" style="transition: opacity 0.5s ease; background: rgba(1, 181, 116, 0.1); color: var(--success); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(1, 181, 116, 0.2);">
         <i class="bi bi-check-circle-fill" style="font-size: 1.2rem;"></i>
         <?= session()->getFlashdata('success') ?>
       </div>
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('error')) : ?>
-      <div style="background: rgba(238, 93, 80, 0.1); color: var(--danger); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(238, 93, 80, 0.2);">
+      <div class="flash-alert" style="transition: opacity 0.5s ease; background: rgba(238, 93, 80, 0.1); color: var(--danger); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(238, 93, 80, 0.2);">
         <i class="bi bi-exclamation-triangle-fill" style="font-size: 1.2rem;"></i>
         <?= session()->getFlashdata('error') ?>
       </div>
@@ -476,6 +476,7 @@
             <th>Kategori</th>
             <th>Disubmit Oleh</th>
             <th>Status</th>
+            <th>Tanggal</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -487,6 +488,7 @@
               <td><?= esc($k['nama_kategori'] ?? '-') ?></td>
               <td><?= esc($k['user_nama'] ?? '-') ?></td>
               <td><span class="badge badge-pending"><i class="bi bi-circle-fill" style="font-size:0.5rem"></i> Pending</span></td>
+              <td><?= !empty($k['created_at']) ? date('d M Y', strtotime($k['created_at'])) : '-' ?></td>
               <td>
                 <div class="action-btns">
                   <a href="<?= base_url('approve-kuliner/' . $k['id']) ?>" class="btn-action btn-approve" title="Approve" onclick="return confirm('Approve tempat ini?')"><i class="bi bi-check-lg"></i></a>
@@ -525,6 +527,7 @@
             <th>Kategori</th>
             <th>Disubmit Oleh</th>
             <th>Status</th>
+            <th>Tanggal</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -544,6 +547,7 @@
                   <span class="badge badge-rejected"><i class="bi bi-x-lg"></i> Rejected</span>
                 <?php endif; ?>
               </td>
+              <td><?= !empty($k['created_at']) ? date('d M Y', strtotime($k['created_at'])) : '-' ?></td>
               <td>
                 <div class="action-btns">
                   <a href="<?= base_url('edit-kuliner/' . $k['id']) ?>" class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-square"></i></a>
@@ -619,4 +623,13 @@
 </div>
 
 </body>
+<script>
+  // UX Auto-hide Flash Messages after 3 seconds
+  setTimeout(() => {
+    document.querySelectorAll('.flash-alert').forEach(el => {
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 500); // Remove from DOM after fade out
+    });
+  }, 3000);
+</script>
 </html>

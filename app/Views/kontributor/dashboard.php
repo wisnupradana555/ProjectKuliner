@@ -420,14 +420,14 @@
 
     <!-- Flash Messages -->
     <?php if (session()->getFlashdata('success')) : ?>
-      <div style="background: rgba(1, 181, 116, 0.1); color: var(--success); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(1, 181, 116, 0.2);">
+      <div class="flash-alert" style="transition: opacity 0.5s ease; background: rgba(1, 181, 116, 0.1); color: var(--success); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(1, 181, 116, 0.2);">
         <i class="bi bi-check-circle-fill" style="font-size: 1.2rem;"></i>
         <?= session()->getFlashdata('success') ?>
       </div>
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('error')) : ?>
-      <div style="background: rgba(238, 93, 80, 0.1); color: var(--danger); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(238, 93, 80, 0.2);">
+      <div class="flash-alert" style="transition: opacity 0.5s ease; background: rgba(238, 93, 80, 0.1); color: var(--danger); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(238, 93, 80, 0.2);">
         <i class="bi bi-exclamation-triangle-fill" style="font-size: 1.2rem;"></i>
         <?= session()->getFlashdata('error') ?>
       </div>
@@ -463,7 +463,7 @@
 
     <!-- Tombol Tambah Utama -->
     <a href="<?= base_url('tambah-kuliner') ?>" class="btn-primary">
-      <i class="bi bi-plus-lg"></i> Kontribusi Tempat Kuliner Baru
+      <i class="bi bi-plus-lg"></i> Tambah Baru
     </a>
 
     <!-- Tabel Submisi -->
@@ -479,6 +479,7 @@
             <th>Kategori</th>
             <th>Alamat</th>
             <th>Status</th>
+            <th>Tanggal</th>
           </tr>
         </thead>
         <tbody>
@@ -495,13 +496,14 @@
                   <span class="badge badge-pending"><i class="bi bi-circle-fill" style="font-size:0.5rem"></i> Pending</span>
                 <?php else: ?>
                   <span class="badge badge-rejected"><i class="bi bi-x-lg"></i> Rejected</span>
-                <?php endif; ?>
+                  <?php endif; ?>
               </td>
+              <td><?= !empty($k['created_at']) ? date('d M Y', strtotime($k['created_at'])) : '-' ?></td>
             </tr>
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="4">
+              <td colspan="5">
                 <div class="empty-state">
                   <i class="bi bi-journal-x" style="font-size: 2rem; color: #A3AED0; margin-bottom: 8px; display: block"></i>
                   Kamu belum menambahkan tempat kuliner apapun.
@@ -517,4 +519,13 @@
 </div>
 
 </body>
+<script>
+  // UX Auto-hide Flash Messages after 3 seconds
+  setTimeout(() => {
+    document.querySelectorAll('.flash-alert').forEach(el => {
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 500); // Remove from DOM after fade out
+    });
+  }, 3000);
+</script>
 </html>

@@ -23,5 +23,5 @@ class KulinerModel extends Model
     ];
 
     // Pengaturan waktu otomatis
-    protected $useTimestamps    = false;
+    protected $useTimestamps    = true;
 }

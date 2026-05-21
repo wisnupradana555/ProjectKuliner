@@ -19,7 +19,7 @@ class AdminController extends BaseController
             
             // Query ditambahkan LEFT JOIN ke foto_tempat agar gambar bisa tampil di tabel
             'pending_kuliner' => $db->table('tempat_kuliner tk')
-                ->select('tk.id, tk.nama, tk.status, k.nama_kategori, u.nama as user_nama, ft.file_foto')
+                ->select('tk.id, tk.nama, tk.status, k.nama_kategori, u.nama as user_nama, ft.file_foto, tk.created_at')
                 ->join('kategori k', 'k.id = tk.kategori_id', 'left')
                 ->join('users u', 'u.id = tk.user_id', 'left')
                 ->join('foto_tempat ft', 'ft.tempat_id = tk.id', 'left')
@@ -28,7 +28,7 @@ class AdminController extends BaseController
                 ->get()->getResultArray(),
                 
             'semua_kuliner'   => $db->table('tempat_kuliner tk')
-                ->select('tk.id, tk.nama, tk.status, k.nama_kategori, u.nama as user_nama, ft.file_foto')
+                ->select('tk.id, tk.nama, tk.status, k.nama_kategori, u.nama as user_nama, ft.file_foto, tk.created_at')
                 ->join('kategori k', 'k.id = tk.kategori_id', 'left')
                 ->join('users u', 'u.id = tk.user_id', 'left')
                 ->join('foto_tempat ft', 'ft.tempat_id = tk.id', 'left')
@@ -51,7 +51,7 @@ class AdminController extends BaseController
             'total_pending' => $db->table('tempat_kuliner')->where('user_id', $uid)->where('status', 'pending')->countAllResults(),
             
             'kuliner_saya'  => $db->table('tempat_kuliner tk')
-                ->select('tk.id, tk.nama, tk.alamat, tk.status, k.nama_kategori, ft.file_foto')
+                ->select('tk.id, tk.nama, tk.alamat, tk.status, k.nama_kategori, ft.file_foto, tk.created_at')
                 ->join('kategori k', 'k.id = tk.kategori_id', 'left')
                 ->join('foto_tempat ft', 'ft.tempat_id = tk.id', 'left')
                 ->where('tk.user_id', $uid)
@@ -65,7 +65,9 @@ class AdminController extends BaseController
 
     public function create()
     {
-        return view('tambah_kuliner'); 
+        $db = \Config\Database::connect();
+        $data['kategori'] = $db->table('kategori')->get()->getResultArray();
+        return view('tambah_kuliner', $data); 
     }
 
     public function store()
@@ -86,7 +88,9 @@ class AdminController extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            // Gabungkan array error jadi 1 string pakai <br> biar kebaca di kotak merah UI
+            $errorString = implode('<br>', $this->validator->getErrors());
+            return redirect()->back()->withInput()->with('error', $errorString);
         }
 
         // 2. Simpan Data Tempat Kuliner
@@ -121,14 +125,16 @@ class AdminController extends BaseController
         }
 
         $halaman = (session()->get('role') === 'admin') ? '/admin' : '/dashboard';
-        return redirect()->to($halaman)->with('pesan', 'Mantap! Kuliner & gambar berhasil ditambahkan.');
+        return redirect()->to($halaman)->with('success', 'Mantap! Kuliner & gambar berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
         $model = new KulinerModel();
+        $db = \Config\Database::connect();
         $data = [
-            'kuliner' => $model->find($id)
+            'kuliner' => $model->find($id),
+            'kategori' => $db->table('kategori')->get()->getResultArray()
         ];
         
         return view('edit_kuliner', $data); 
@@ -150,9 +156,9 @@ class AdminController extends BaseController
         $model->update($id, $data);
 
         if (session()->get('role') === 'admin') {
-            return redirect()->to('/admin')->with('pesan', 'Sip! Data Kuliner berhasil diperbarui.');
+            return redirect()->to('/admin')->with('success', 'Sip! Data Kuliner berhasil diperbarui.');
         } else {
-            return redirect()->to('/dashboard')->with('pesan', 'Sip! Data Kuliner berhasil diperbarui.');
+            return redirect()->to('/dashboard')->with('success', 'Sip! Data Kuliner berhasil diperbarui.');
         }
     }
 
@@ -174,9 +180,9 @@ class AdminController extends BaseController
         $model->delete($id);
 
         if (session()->get('role') === 'admin') {
-            return redirect()->to('/admin')->with('pesan', 'Data Kuliner berhasil dihapus dari sistem.');
+            return redirect()->to('/admin')->with('success', 'Data Kuliner berhasil dihapus dari sistem.');
         } else {
-            return redirect()->to('/dashboard')->with('pesan', 'Data Kuliner berhasil dihapus dari sistem.');
+            return redirect()->to('/dashboard')->with('success', 'Data Kuliner berhasil dihapus dari sistem.');
         }
     }
 }

@@ -172,7 +172,8 @@
     .rp-header { padding: 20px 24px; position: relative; border-bottom: 1px solid rgba(163, 174, 208, 0.15); }
 
     .rp-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-main); padding-right: 40px; margin-bottom: 4px; line-height: 1.2; }
-    .rp-cat { font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 12px; }
+    .rp-cat { font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 6px; }
+    .rp-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
     .rp-address { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 8px; }
     .rp-address i { color: var(--primary); margin-top: 2px; }
 
@@ -263,6 +264,7 @@
     <div class="rp-header">
       <div class="rp-title" id="rp-title">-</div>
       <div class="rp-cat" id="rp-cat">-</div>
+      <div class="rp-date" id="rp-date"><i class="bi bi-calendar3"></i> <span>-</span></div>
       <div class="rp-address"><i class="bi bi-geo-alt-fill"></i> <span id="rp-address">-</span></div>
     </div>
     
@@ -330,7 +332,8 @@ const kuliner = <?= json_encode(array_map(function($k) {
         'nama'     => $k['nama'],
         'kategori' => strtolower($k['kategori']),
         'alamat'   => $k['alamat'],
-        'deskripsi'=> $k['deskripsi']
+        'deskripsi'=> $k['deskripsi'],
+        'tanggal'  => !empty($k['created_at']) ? date('d M Y', strtotime($k['created_at'])) : '-'
     ];
 }, $kuliner)) ?>;
 
@@ -367,6 +370,7 @@ function selectPlace(k) {
   // Update isi Right Panel
   document.getElementById('rp-title').textContent = k.nama;
   document.getElementById('rp-cat').textContent = k.kategori.charAt(0).toUpperCase() + k.kategori.slice(1);
+  document.getElementById('rp-date').querySelector('span').textContent = "Ditambahkan: " + k.tanggal;
   document.getElementById('rp-address').textContent = k.alamat;
   
   const formId = document.getElementById('form-tempat-id');

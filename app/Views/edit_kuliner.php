@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Tempat Kuliner</title>
+    <title>Edit Tempat Kuliner</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -43,62 +43,54 @@
 <body>
 
     <div class="form-container">
-        <h2>Tambah Tempat Kuliner</h2>
-        <?php if (session()->getFlashdata('errors')) : ?>
+        <h2>Edit Tempat Kuliner</h2>
+        <?php if (session()->getFlashdata('error')) : ?>
         <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
-            <ul style="margin: 0; padding-left: 20px;">
-                <?php foreach (session()->getFlashdata('errors') as $error) : ?>
-                    <li><?= esc($error) ?></li>
-                <?php endforeach ?>
-            </ul>
+            <?= session()->getFlashdata('error') ?>
         </div>
-    <?php endif; ?>
-        <form action="/simpan-kuliner" method="post" enctype="multipart/form-data">
+        <?php endif; ?>
+        
+        <form action="/update-kuliner/<?= $kuliner['id'] ?>" method="post">
             <?= csrf_field(); ?>
             
             <div class="form-group">
                 <label>Nama Tempat</label>
-                <input type="text" name="nama" class="form-control" placeholder="Contoh: Nasi Goreng Babat Pak Karmin" required>
+                <input type="text" name="nama" class="form-control" value="<?= esc($kuliner['nama']) ?>" required>
             </div>
 
             <div class="form-group">
                 <label>Kategori Kuliner</label>
                 <select name="kategori_id" class="form-control" required>
-                    <option value="" disabled selected>-- Pilih Kategori --</option>
                     <?php foreach ($kategori as $k) : ?>
-                        <option value="<?= $k['id'] ?>"><?= esc($k['nama_kategori']) ?></option>
+                        <option value="<?= $k['id'] ?>" <?= $kuliner['kategori_id'] == $k['id'] ? 'selected' : '' ?>><?= esc($k['nama_kategori']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Alamat Lengkap</label>
-                <textarea name="alamat" rows="3" class="form-control" placeholder="Tuliskan alamat lengkap jalan, RT/RW, dll..." required></textarea>
+                <textarea name="alamat" rows="3" class="form-control" required><?= esc($kuliner['alamat']) ?></textarea>
             </div>
 
             <div class="form-group">
                 <label>Deskripsi Singkat</label>
-                <textarea name="deskripsi" rows="3" class="form-control" placeholder="Ceritakan ciri khas atau menu andalan dari tempat ini..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Foto Tempat Kuliner</label>
-                <input type="file" name="gambar" class="form-control" accept="image/*" style="padding: 9px;" required>
-                <small style="color: #888; font-size: 12px; margin-top: 5px; display: block;">Format: JPG, PNG, JPEG. Maksimal 2MB.</small>
+                <textarea name="deskripsi" rows="3" class="form-control"><?= esc($kuliner['deskripsi']) ?></textarea>
             </div>
 
             <div class="row">
                 <div class="col form-group">
                     <label>Latitude (Lat) Peta</label>
-                    <input type="text" name="lat" class="form-control" placeholder="Contoh: -6.966667">
+                    <input type="text" name="lat" class="form-control" value="<?= esc($kuliner['lat']) ?>">
                 </div>
                 <div class="col form-group">
                     <label>Longitude (Lon) Peta</label>
-                    <input type="text" name="lon" class="form-control" placeholder="Contoh: 110.416664">
+                    <input type="text" name="lon" class="form-control" value="<?= esc($kuliner['lon']) ?>">
                 </div>
             </div>
             <div class="btn-group">
-                <button type="submit" class="btn-save">Simpan Data</button>
-                <a href="/dashboard" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-save">Update Data</button>
+                <?php $kembali = session()->get('role') === 'admin' ? '/admin' : '/dashboard'; ?>
+                <a href="<?= $kembali ?>" class="btn-cancel">Batal</a>
             </div>
         </form>
     </div>

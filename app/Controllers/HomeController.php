@@ -11,7 +11,7 @@ class HomeController extends BaseController
         $db = \Config\Database::connect();
 
         $kuliner = $db->table('tempat_kuliner tk')
-            ->select('tk.id, tk.nama, tk.alamat, tk.deskripsi, tk.lat, tk.lon, k.nama_kategori as kategori')
+            ->select('tk.id, tk.nama, tk.alamat, tk.deskripsi, tk.lat, tk.lon, k.nama_kategori as kategori, tk.created_at')
             ->join('kategori k', 'k.id = tk.kategori_id')
             ->where('tk.status', 'approved')
             ->get()->getResultArray();
