@@ -33,19 +33,4 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 
     // 4. APPROVE (Opsional untuk fitur verifikasi admin)
     $routes->get('/approve-kuliner/(:num)', 'AdminController::approve/$1');
-}); // <--- Tadi di sini kurang tanda );
-
-// --- ROUTE SEMENTARA UNTUK RESET PASSWORD ---
-$routes->get('/reset-password-sekarang', function() {
-    $db = \Config\Database::connect();
-    
-    // Kita set password barunya menjadi: 123456
-    $password_baru = password_hash('123456', PASSWORD_DEFAULT);
-    
-    // Update password khusus untuk akun dengan email adit@gmail.com
-    $db->table('users')->where('email', 'adit@gmail.com')->update([
-        'password' => $password_baru
-    ]);
-    
-    return "Berhasil! Password untuk adit@gmail.com sekarang adalah: 123456";
-}); 
+});
