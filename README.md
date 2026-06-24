@@ -1,69 +1,167 @@
-# CodeIgniter 4 Application Starter
+# ProjectKuliner — Lokasi Kuliner & Review Jajanan
+Aplikasi web berbasis **CodeIgniter 4** untuk menemukan, menambahkan, dan me-review tempat kuliner di sekitar kampus Universitas Dian Nuswantoro Semarang.
 
-## What is CodeIgniter?
+---
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Akun Demo
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@admin.com | admin123 |
+| Kontributor | user@user.com | user123 |
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+---
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Cara Instalasi & Menjalankan
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+```bash
+# 1. Clone repository
+git clone https://github.com/wisnupradana555/ProjectKuliner.git
+cd ProjectKuliner
 
-## Installation & updates
+# 2. Install dependencies
+composer install
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+# 3. Salin file konfigurasi
+cp env .env
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+# 4. Edit .env — sesuaikan database
+DB_HOST     = localhost
+DB_DATABASE = db_kuliner
+DB_USERNAME = root
+DB_PASSWORD =
 
-## Setup
+# 5. Jalankan migrasi & seeder
+php spark migrate
+php spark db:seed KulinerSeeder
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+# 6. Jalankan server
+php spark serve
+```
 
-## Important Change with index.php
+Buka browser: `http://localhost:8080`
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+---
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Fitur Utama
+- Peta interaktif (Leaflet.js + OpenStreetMap) untuk melihat lokasi kuliner
+- Multi-role: Admin, Kontributor, Pengunjung
+- CRUD tempat kuliner + upload foto
+- Sistem moderasi (approve/reject) oleh Admin
+- Flash Message & Validasi Form
+- Tanggal submit tercatat otomatis
 
-**Please** read the user guide for a better explanation of how CI4 works!
+---
 
-## Repository Management
+## Webservice Server — API Endpoint (Point 6)
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Base URL: `http://localhost:8080`
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+### Autentikasi
+Semua request ke endpoint `/api/*` wajib menyertakan header:
+```
+X-API-Key: kuliner-api-key-udinus-2026
+```
+Jika tidak disertakan atau salah, server akan mengembalikan response `401 Unauthorized`.
 
-## Server Requirements
+---
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+### Endpoint
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+#### 1. GET `/api/kuliner`
+Mengambil daftar semua tempat kuliner yang sudah disetujui (approved).
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+**Query Parameter (Opsional):**
+| Parameter | Tipe | Keterangan |
+|---|---|---|
+| `kategori` | integer | Filter berdasarkan ID kategori |
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+**Contoh Request:**
+```
+GET /api/kuliner
+GET /api/kuliner?kategori=2
+X-API-Key: kuliner-api-key-udinus-2026
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+**Contoh Response:**
+```json
+{
+    "status": "success",
+    "total": 20,
+    "data": [
+        {
+            "id": "41",
+            "nama": "Burjo Sari Asih 2",
+            "alamat": "Jl. Nakula I No.1, Semarang",
+            "deskripsi": "Nasi, mie ayam, bakso murah meriah.",
+            "lat": "-6.9824",
+            "lon": "110.4086",
+            "created_at": "2026-05-06 20:40:41",
+            "kategori": "Warteg",
+            "foto_url": null
+        }
+    ]
+}
+```
+
+---
+
+#### 2. GET `/api/kuliner/{id}`
+Mengambil detail satu tempat kuliner berdasarkan ID.
+
+**Contoh Request:**
+```
+GET /api/kuliner/41
+X-API-Key: kuliner-api-key-udinus-2026
+```
+
+**Contoh Response (200 OK):**
+```json
+{
+    "status": "success",
+    "data": {
+        "id": "41",
+        "nama": "Burjo Sari Asih 2",
+        "alamat": "Jl. Nakula I No.1, Semarang",
+        "kategori": "Warteg"
+    }
+}
+```
+
+**Contoh Response (404 Not Found):**
+```json
+{
+    "status": "error",
+    "message": "Data tidak ditemukan."
+}
+```
+
+---
+
+#### 3. GET `/api/kategori`
+Mengambil daftar semua kategori kuliner.
+
+**Contoh Request:**
+```
+GET /api/kategori
+X-API-Key: kuliner-api-key-udinus-2026
+```
+
+**Contoh Response:**
+```json
+{
+    "status": "success",
+    "total": 6,
+    "data": [
+        { "id": "1", "nama_kategori": "Warteg" },
+        { "id": "2", "nama_kategori": "Kafe" }
+    ]
+}
+```
+
+---
+
+## Tech Stack
+- **Framework:** CodeIgniter 4
+- **Database:** MySQL
+- **Map:** Leaflet.js + OpenStreetMap
+- **Frontend:** HTML, CSS, JavaScript (Vanilla)

@@ -13,6 +13,11 @@ $routes->post('/loginProcess', 'AuthController::loginProcess');
 $routes->get('/register', 'AuthController::register');
 $routes->post('/registerProcess', 'AuthController::registerProcess');
 
+// --- WEBSERVICE SERVER (API Endpoint - Point 6) ---
+$routes->get('/api/kuliner', 'ApiController::kuliner');
+$routes->get('/api/kuliner/(:num)', 'ApiController::detail/$1');
+$routes->get('/api/kategori', 'ApiController::kategori');
+
 // --- ROUTE TERPROTEKSI (Wajib login) ---
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->get('/dashboard', 'AdminController::dashboard');
