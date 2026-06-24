@@ -2,105 +2,68 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
+use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
 
-class ApiController extends Controller
+class ApiController extends BaseController
 {
-    /**
-     * GET /api/kuliner
-     * Mengembalikan daftar semua tempat kuliner yang sudah diapprove dalam format JSON.
-     * Bisa difilter dengan query parameter: ?kategori=1 atau ?lat=x&lng=y
-     */
-    public function kuliner()
+    use ResponseTrait;
+
+    public function getCoordinates()
     {
-        $db = \Config\Database::connect();
-
-        $builder = $db->table('tempat_kuliner tk')
-            ->select('tk.id, tk.nama, tk.alamat, tk.deskripsi, tk.lat, tk.lon, tk.created_at, k.nama_kategori as kategori, ft.file_foto')
-            ->join('kategori k', 'k.id = tk.kategori_id', 'left')
-            ->join('foto_tempat ft', 'ft.tempat_id = tk.id', 'left')
-            ->where('tk.status', 'approved')
-            ->groupBy('tk.id')
-            ->orderBy('tk.created_at', 'DESC');
-
-        // Filter opsional berdasarkan kategori
-        $kategori = $this->request->getGet('kategori');
-        if ($kategori) {
-            $builder->where('tk.kategori_id', $kategori);
+        // 1. Terima input alamat dari AJAX 
+        $alamat = $this->request->getGet('alamat');
+        
+        if (!$alamat) {
+            return $this->fail('Alamat tidak boleh kosong', 400); // Error handling
         }
 
-        $data = $builder->get()->getResultArray();
+        // Setup Caching (Syarat nilai maksimal) 
+        $cache = \Config\Services::cache();
+        $cacheKey = 'geocode_' . md5($alamat);
+        $cachedData = $cache->get($cacheKey);
 
-        // Format foto agar ada full URL-nya
-        foreach ($data as &$item) {
-            $item['foto_url'] = $item['file_foto']
-                ? base_url('uploads/' . $item['file_foto'])
-                : null;
-            unset($item['file_foto']);
+        // Jika data ada di cache, langsung kembalikan
+        if ($cachedData !== null) {
+            return $this->respond($cachedData);
         }
 
-        return $this->response
-            ->setStatusCode(200)
-            ->setJSON([
-                'status'  => 'success',
-                'total'   => count($data),
-                'data'    => $data
+        // 2. HTTP Request ke API Nominatim
+        $client = \Config\Services::curlrequest();
+        
+        try {
+            // URL endpoint sesuai spesifikasi
+            $response = $client->request('GET', 'https://nominatim.openstreetmap.org/search', [
+                'query' => [
+                    'q'      => $alamat,
+                    'format' => 'json',
+                    'limit'  => 1
+                ],
+                'headers' => [
+                    // Nominatim mewajibkan User-Agent yang jelas agar tidak diblokir
+                    'User-Agent' => 'ProjectKuliner/1.0' 
+                ]
             ]);
-    }
 
-    /**
-     * GET /api/kuliner/{id}
-     * Mengembalikan detail satu tempat kuliner berdasarkan ID.
-     */
-    public function detail($id)
-    {
-        $db = \Config\Database::connect();
+            $body = json_decode($response->getBody());
 
-        $data = $db->table('tempat_kuliner tk')
-            ->select('tk.id, tk.nama, tk.alamat, tk.deskripsi, tk.lat, tk.lon, tk.created_at, k.nama_kategori as kategori, ft.file_foto')
-            ->join('kategori k', 'k.id = tk.kategori_id', 'left')
-            ->join('foto_tempat ft', 'ft.tempat_id = tk.id', 'left')
-            ->where('tk.id', $id)
-            ->where('tk.status', 'approved')
-            ->get()->getRowArray();
+            // 3. Ambil response [0].lat dan [0].lon
+            if (!empty($body)) {
+                $result = [
+                    'lat' => $body[0]->lat,
+                    'lon' => $body[0]->lon
+                ];
+                
+                // Simpan hasil ke cache selama 24 jam (86400 detik)
+                $cache->save($cacheKey, $result, 86400);
+                
+                return $this->respond($result);
+            } else {
+                return $this->failNotFound('Koordinat tidak ditemukan untuk alamat tersebut.'); // Error handling 
+            }
 
-        if (!$data) {
-            return $this->response
-                ->setStatusCode(404)
-                ->setJSON([
-                    'status'  => 'error',
-                    'message' => 'Data tidak ditemukan.'
-                ]);
+        } catch (\Exception $e) {
+            return $this->failServerError('Gagal menghubungi server Nominatim: ' . $e->getMessage()); // Error handling 
         }
-
-        $data['foto_url'] = $data['file_foto']
-            ? base_url('uploads/' . $data['file_foto'])
-            : null;
-        unset($data['file_foto']);
-
-        return $this->response
-            ->setStatusCode(200)
-            ->setJSON([
-                'status' => 'success',
-                'data'   => $data
-            ]);
-    }
-
-    /**
-     * GET /api/kategori
-     * Mengembalikan daftar semua kategori kuliner dalam format JSON.
-     */
-    public function kategori()
-    {
-        $db   = \Config\Database::connect();
-        $data = $db->table('kategori')->get()->getResultArray();
-
-        return $this->response
-            ->setStatusCode(200)
-            ->setJSON([
-                'status' => 'success',
-                'total'  => count($data),
-                'data'   => $data
-            ]);
     }
 }

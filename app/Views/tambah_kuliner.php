@@ -38,12 +38,30 @@
         .btn-save:hover { background-color: #0056b3; }
         .btn-cancel { color: #64748b; text-decoration: none; font-size: 15px; padding: 12px 25px; border-radius: 8px; font-weight: 600; transition: all 0.2s ease; border: 1px solid transparent; }
         .btn-cancel:hover { background: #f1f5f9; color: #007bff; }
+        
+        /* CSS Tambahan untuk tombol action (Cari Koordinat) */
+        .btn-action { 
+            background-color: #10b981; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: 600; 
+            margin-top: 10px;
+            transition: background-color 0.2s;
+            display: inline-block;
+        }
+        .btn-action:hover { background-color: #059669; }
+        .btn-action:disabled { background-color: #a7f3d0; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <div class="form-container">
         <h2>Tambah Tempat Kuliner</h2>
+        
         <?php if (session()->getFlashdata('errors')) : ?>
         <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
             <ul style="margin: 0; padding-left: 20px;">
@@ -52,7 +70,8 @@
                 <?php endforeach ?>
             </ul>
         </div>
-    <?php endif; ?>
+        <?php endif; ?>
+        
         <form action="/simpan-kuliner" method="post" enctype="multipart/form-data">
             <?= csrf_field(); ?>
             
@@ -73,13 +92,15 @@
 
             <div class="form-group">
                 <label>Alamat Lengkap</label>
-                <textarea name="alamat" rows="3" class="form-control" placeholder="Tuliskan alamat lengkap jalan, RT/RW, dll..." required></textarea>
+                <textarea name="alamat" id="alamat" rows="3" class="form-control" placeholder="Tuliskan alamat lengkap jalan, RT/RW, dll..." required></textarea>
+                <button type="button" id="btnCariKoordinat" class="btn-action">📍 Cari Koordinat Otomatis</button>
             </div>
 
             <div class="form-group">
                 <label>Deskripsi Singkat</label>
                 <textarea name="deskripsi" rows="3" class="form-control" placeholder="Ceritakan ciri khas atau menu andalan dari tempat ini..."></textarea>
             </div>
+            
             <div class="form-group">
                 <label>Foto Tempat Kuliner</label>
                 <input type="file" name="gambar" class="form-control" accept="image/*" style="padding: 9px;" required>
@@ -89,19 +110,65 @@
             <div class="row">
                 <div class="col form-group">
                     <label>Latitude (Lat) Peta</label>
-                    <input type="text" name="lat" class="form-control" placeholder="Contoh: -6.966667">
+                    <input type="text" name="lat" id="lat" class="form-control" placeholder="Terisi otomatis..." readonly required>
                 </div>
                 <div class="col form-group">
                     <label>Longitude (Lon) Peta</label>
-                    <input type="text" name="lon" class="form-control" placeholder="Contoh: 110.416664">
+                    <input type="text" name="lon" id="lon" class="form-control" placeholder="Terisi otomatis..." readonly required>
                 </div>
             </div>
+            
             <div class="btn-group">
                 <button type="submit" class="btn-save">Simpan Data</button>
                 <a href="/dashboard" class="btn-cancel">Batal</a>
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById('btnCariKoordinat').addEventListener('click', function() {
+            let alamat = document.getElementById('alamat').value.trim();
+            
+            if (!alamat) {
+                alert("Mohon isi alamat lengkap terlebih dahulu sebelum mencari koordinat.");
+                return;
+            }
+
+            let btn = this;
+            let originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Mencari...';
+            btn.disabled = true;
+
+            // Memanggil endpoint API Controller yang sudah kita buat sebelumnya
+            fetch('/api/get-coordinates?alamat=' + encodeURIComponent(alamat))
+                .then(response => response.json())
+                .then(data => {
+                    // Jika sukses menemukan koordinat
+                    if (data.lat && data.lon) {
+                        document.getElementById('lat').value = data.lat;
+                        document.getElementById('lon').value = data.lon;
+                        
+                        // Menambahkan style visual bahwa koordinat berhasil didapat
+                        document.getElementById('lat').style.borderColor = '#10b981';
+                        document.getElementById('lon').style.borderColor = '#10b981';
+                        
+                        // Opsional: Alert sukses bisa dihapus kalau dirasa mengganggu
+                        // alert("Koordinat berhasil ditemukan!"); 
+                    } else {
+                        // Jika Controller mengembalikan error / koordinat tidak ditemukan
+                        alert("Gagal: Koordinat tidak ditemukan. Pastikan nama jalan / kota ditulis dengan benar.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Terjadi kesalahan sistem saat menghubungi server.");
+                })
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+        });
+    </script>
 
 </body>
 </html>

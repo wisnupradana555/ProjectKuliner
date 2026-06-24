@@ -13,6 +13,8 @@ $routes->post('/loginProcess', 'AuthController::loginProcess');
 $routes->get('/register', 'AuthController::register');
 $routes->post('/registerProcess', 'AuthController::registerProcess');
 
+$routes->get('api/get-coordinates', 'ApiController::getCoordinates');
+
 // --- WEBSERVICE SERVER (API Endpoint - Point 6) ---
 $routes->get('/api/kuliner', 'ApiController::kuliner');
 $routes->get('/api/kuliner/(:num)', 'ApiController::detail/$1');
