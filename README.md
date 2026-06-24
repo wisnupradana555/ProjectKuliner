@@ -59,7 +59,7 @@ Base URL: `http://localhost:8080`
 ### Autentikasi
 Semua request ke endpoint `/api/*` wajib menyertakan header:
 ```
-X-API-Key: kuliner-api-key-udinus-2026
+X-API-Key: kuliner-api-key
 ```
 Jika tidak disertakan atau salah, server akan mengembalikan response `401 Unauthorized`.
 
@@ -79,7 +79,7 @@ Mengambil daftar semua tempat kuliner yang sudah disetujui (approved).
 ```
 GET /api/kuliner
 GET /api/kuliner?kategori=2
-X-API-Key: kuliner-api-key-udinus-2026
+X-API-Key: kuliner-api-key
 ```
 
 **Contoh Response:**
@@ -111,7 +111,7 @@ Mengambil detail satu tempat kuliner berdasarkan ID.
 **Contoh Request:**
 ```
 GET /api/kuliner/41
-X-API-Key: kuliner-api-key-udinus-2026
+X-API-Key: kuliner-api-key
 ```
 
 **Contoh Response (200 OK):**
@@ -143,7 +143,7 @@ Mengambil daftar semua kategori kuliner.
 **Contoh Request:**
 ```
 GET /api/kategori
-X-API-Key: kuliner-api-key-udinus-2026
+X-API-Key: kuliner-api-key
 ```
 
 **Contoh Response:**

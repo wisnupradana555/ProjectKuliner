@@ -9,7 +9,7 @@ use CodeIgniter\Filters\FilterInterface;
 class ApiKeyFilter implements FilterInterface
 {
     // API Key yang valid — bisa diubah sesuai kebutuhan
-    private const VALID_API_KEY = 'kuliner-api-key-udinus-2026';
+    private const VALID_API_KEY = 'kuliner-api-key';
 
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -23,7 +23,7 @@ class ApiKeyFilter implements FilterInterface
             $response->setJSON([
                 'status'  => 'error',
                 'message' => 'Unauthorized. API Key tidak valid atau tidak disertakan.',
-                'hint'    => 'Sertakan header: X-API-Key: kuliner-api-key-udinus-2026'
+                'hint'    => 'Sertakan header: X-API-Key: kuliner-api-key'
             ]);
             return $response;
         }
