@@ -8,22 +8,18 @@ use CodeIgniter\Filters\FilterInterface;
 
 class ApiKeyFilter implements FilterInterface
 {
-    // API Key yang valid — bisa diubah sesuai kebutuhan
-    private const VALID_API_KEY = 'kuliner-api-key';
-
     public function before(RequestInterface $request, $arguments = null)
     {
-        // Ambil API Key dari header request
-        $apiKey = $request->getHeaderLine('X-API-Key');
+        $validApiKey = env('API_KEY', 'kuliner-sk-4f8a2b9c3d1e7f6a');
+        $apiKey = $request->getHeaderLine('Authorization');
 
-        // Jika API Key tidak ada atau salah, tolak request
-        if ($apiKey !== self::VALID_API_KEY) {
+        if ($apiKey !== $validApiKey) {
             $response = service('response');
             $response->setStatusCode(401);
             $response->setJSON([
                 'status'  => 'error',
                 'message' => 'Unauthorized. API Key tidak valid atau tidak disertakan.',
-                'hint'    => 'Sertakan header: X-API-Key: kuliner-api-key'
+                'hint'    => 'Sertakan header: Authorization: [your-api-key]'
             ]);
             return $response;
         }
@@ -31,6 +27,5 @@ class ApiKeyFilter implements FilterInterface
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // Tidak ada aksi setelah response
     }
 }

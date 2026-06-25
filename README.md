@@ -47,6 +47,9 @@ Buka browser: `http://localhost:8080`
 - Multi-role: Admin, Kontributor, Pengunjung
 - CRUD tempat kuliner + upload foto
 - Sistem moderasi (approve/reject) oleh Admin
+- Geocoding otomatis: alamat → koordinat via **Nominatim API**
+- Reverse geocoding: klik peta → koordinat + alamat terisi otomatis
+- Pick on Map: pilih lokasi langsung di mini peta saat tambah kuliner
 - Flash Message & Validasi Form
 - Tanggal submit tercatat otomatis
 
@@ -59,7 +62,7 @@ Base URL: `http://localhost:8080`
 ### Autentikasi
 Semua request ke endpoint `/api/*` wajib menyertakan header:
 ```
-X-API-Key: kuliner-api-key
+Authorization: kuliner-sk-4f8a2b9c3d1e7f6a
 ```
 Jika tidak disertakan atau salah, server akan mengembalikan response `401 Unauthorized`.
 
@@ -79,7 +82,7 @@ Mengambil daftar semua tempat kuliner yang sudah disetujui (approved).
 ```
 GET /api/kuliner
 GET /api/kuliner?kategori=2
-X-API-Key: kuliner-api-key
+Authorization: kuliner-sk-4f8a2b9c3d1e7f6a
 ```
 
 **Contoh Response:**
@@ -111,7 +114,7 @@ Mengambil detail satu tempat kuliner berdasarkan ID.
 **Contoh Request:**
 ```
 GET /api/kuliner/41
-X-API-Key: kuliner-api-key
+Authorization: kuliner-sk-4f8a2b9c3d1e7f6a
 ```
 
 **Contoh Response (200 OK):**
@@ -143,7 +146,7 @@ Mengambil daftar semua kategori kuliner.
 **Contoh Request:**
 ```
 GET /api/kategori
-X-API-Key: kuliner-api-key
+Authorization: kuliner-sk-4f8a2b9c3d1e7f6a
 ```
 
 **Contoh Response:**
@@ -163,5 +166,7 @@ X-API-Key: kuliner-api-key
 ## Tech Stack
 - **Framework:** CodeIgniter 4
 - **Database:** MySQL
-- **Map:** Leaflet.js + OpenStreetMap
+- **Map:** Leaflet.js + OpenStreetMap tile
+- **Geocoding:** OpenStreetMap Nominatim API (forward & reverse)
+- **Auth API:** CI4 Filter + API Key via `.env`
 - **Frontend:** HTML, CSS, JavaScript (Vanilla)

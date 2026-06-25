@@ -109,6 +109,8 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
-        'apikey' => ['before' => ['api/*']],
+        // API Key wajib untuk endpoint publik (Point 6)
+        // api/get-coordinates dikecualikan karena dipanggil dari AJAX browser
+        'apikey' => ['before' => ['api/kuliner', 'api/kuliner/*', 'api/kategori']],
     ];
 }

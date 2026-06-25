@@ -7,6 +7,8 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"/>
+  <!-- Leaflet.js -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   
   <style>
     :root {
@@ -34,27 +36,12 @@
       background: #E9EDF7;
     }
 
-    /* BACKGROUND PLACEHOLDER (Menggantikan Peta) */
-    #map-placeholder {
+    /* PETA LEAFLET */
+    #map {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       z-index: 0;
-      background-color: #F4F7FE;
-      background-image: radial-gradient(rgba(163, 174, 208, 0.4) 1.5px, transparent 1.5px);
-      background-size: 24px 24px;
-    }
-    
-    .placeholder-text {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--text-muted);
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-align: center;
-      opacity: 0.6;
     }
 
     .ui-layer {
@@ -212,11 +199,8 @@
 </head>
 <body>
 
-<!-- KANVAS KOSONG PENGGANTI PETA -->
-<div id="map-placeholder">
-  <div class="placeholder-text">
-  </div>
-</div>
+<!-- PETA INTERAKTIF LEAFLET.JS -->
+<div id="map"></div>
 
 <div class="ui-layer">
   
@@ -333,6 +317,8 @@ const kuliner = <?= json_encode(array_map(function($k) {
         'kategori' => strtolower($k['kategori']),
         'alamat'   => $k['alamat'],
         'deskripsi'=> $k['deskripsi'],
+        'lat'      => (float)$k['lat'],
+        'lon'      => (float)$k['lon'],
         'tanggal'  => !empty($k['created_at']) ? date('d M Y', strtotime($k['created_at'])) : '-'
     ];
 }, $kuliner)) ?>;
@@ -412,5 +398,42 @@ function applyFilters() {
 
 renderList(kuliner);
 </script>
+
+<!-- Leaflet JS harus diload dulu sebelum kode map dijalankan -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// =====================
+// LEAFLET MAP SETUP
+// =====================
+const map = L.map('map').setView([-6.9903, 110.4229], 14);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// Pasang marker untuk setiap tempat kuliner
+const markers = {};
+kuliner.forEach(k => {
+    if (k.lat && k.lon) {
+        const marker = L.marker([k.lat, k.lon]).addTo(map);
+        marker.bindPopup(`<strong>${k.nama}</strong><br><small>${k.alamat}</small>`);
+        markers[k.id] = marker;
+
+        // Klik marker → buka right panel
+        marker.on('click', () => selectPlace(k));
+    }
+});
+
+// Klik list item → pindah ke marker di peta
+const _origSelectPlace = selectPlace;
+window.selectPlace = function(k) {
+    _origSelectPlace(k);
+    if (markers[k.id]) {
+        map.setView([k.lat, k.lon], 17, { animate: true });
+        markers[k.id].openPopup();
+    }
+};
+</script>
 </body>
 </html>
+

@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // --- ROUTE PUBLIK (Bisa diakses tanpa login) ---
 $routes->get('/', 'HomeController::index');
+$routes->get('/kuliner/(:num)', 'HomeController::detail/$1');
 $routes->get('/login', 'AuthController::login');
 $routes->post('/loginProcess', 'AuthController::loginProcess');
 $routes->get('/register', 'AuthController::register');
